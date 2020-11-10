@@ -1,5 +1,5 @@
 {
-  "name": "Release via Changesets (yarn version)",
-  "description": "Use Changesets to automatically generate releases for a yarn-based project.",
+  "name": "Changeset Releases",
+  "description": "Use Changesets to automatically generate releases.",
   "iconName": "changesets-icon"
 }

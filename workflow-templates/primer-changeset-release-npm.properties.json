@@ -1,5 +1,0 @@
-{
-  "name": "Release via Changesets (npm version)",
-  "description": "Use Changesets to automatically generate releases for an npm-based project.",
-  "iconName": "changesets-icon"
-}
