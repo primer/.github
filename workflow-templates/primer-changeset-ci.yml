@@ -1,9 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches-ignore:
-      - $default-branch
+on: [push]
 
 jobs:
   ci:
@@ -37,10 +34,13 @@ jobs:
             //registry.npmjs.org/:_authToken=$NPM_TOKEN
           EOF
         env:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN_SHARED }}
 
+      # Change `package_name` below to the package name you used for changesets
       - name: Release snapshot
         run: |
+          echo "$( jq '.version = "0.0.0"' package.json )" > package.json
+          echo -e "---\n'package_name': patch\n---\n\nFake entry to force publishing" > .changeset/force-snapshot-release.md
           ./node_modules/.bin/changeset version --snapshot
           ./node_modules/.bin/changeset publish --tag canary
         env:
