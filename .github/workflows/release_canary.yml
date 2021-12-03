@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_call:
+    secrets:
+      github_token: 
+        required: true
+      npm_token:
+        required: true
 
 jobs:
   release-canary:
@@ -33,7 +38,7 @@ jobs:
             //registry.npmjs.org/:_authToken=$NPM_TOKEN
           EOF
         env:
-          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN_SHARED }}
+          NPM_TOKEN: ${{ secrets.npm_token }}
 
       - name: Publish canary release
         run: |
@@ -42,7 +47,7 @@ jobs:
           yarn changeset version --snapshot
           yarn changeset publish --tag canary
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.github_token }}
 
       - name: Output canary version number
         uses: actions/github-script@v4.0.2
