@@ -2,6 +2,11 @@ name: Release
 
 on:
   workflow_call:
+    inputs:
+      install:
+        type: string
+        required: false
+        default: npm ci
     secrets:
       github_token: 
         required: true
@@ -26,7 +31,7 @@ jobs:
           node-version: 16
 
       - name: Install dependencies
-        run: npm ci
+        run: ${{ inputs.install }}
 
       - name: Build
         run: npm run build --if-present
