@@ -16,7 +16,6 @@ on:
 jobs:
   release-candidate:
     name: Candidate
-
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

@@ -3,12 +3,12 @@ name: Release
 on:
   push:
     branches:
-      - 'changeset-release/main'
+      - $default-branch
 
 jobs:
-  release-candidate:
-    name: Candidate
-    uses: primer/.github/.github/workflows/release_candidate.yml@main
+  release:
+    name: Release
+    uses: primer/.github/.github/workflows/release.yml@main
     secrets:
       github_token: ${{ secrets.GITHUB_TOKEN }}
       npm_token: ${{ secrets.NPM_AUTH_TOKEN_SHARED }}

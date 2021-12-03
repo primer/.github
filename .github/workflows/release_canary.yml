@@ -16,7 +16,6 @@ on:
 jobs:
   release-canary:
     name: Canary
-
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
