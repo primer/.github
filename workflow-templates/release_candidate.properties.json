@@ -1,0 +1,9 @@
+{
+  "name": "Release candidate",
+  "description": "Use changesets to publish release candidates",
+  "filePatterns": [
+    "package.json$",
+    ".changeset/**"
+  ]
+}
+  

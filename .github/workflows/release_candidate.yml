@@ -14,8 +14,8 @@ on:
         required: true
 
 jobs:
-  release-canary:
-    name: Canary
+  release-candidate:
+    name: Candidate
 
     runs-on: ubuntu-latest
     steps:
@@ -44,16 +44,15 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.npm_token }}
 
-      - name: Publish canary release
+      - name: Publish release candidate
         run: |
-          echo "$( jq '.version = "0.0.0"' package.json )" > package.json
-          echo -e "---\n$( jq .name package.json ): patch\n---\n\nFake entry to force publishing" > .changeset/force-snapshot-release.md
-          yarn changeset version --snapshot
-          yarn changeset publish --tag canary
+          version=$(jq -r .version package.json)
+          echo "$( jq ".version = \"$(echo $version)-rc.$(git rev-parse --short HEAD)\"" package.json )" > package.json
+          yarn publish --tag next
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}
 
-      - name: Output canary version
+      - name: Output candidate version
         uses: actions/github-script@v4.0.2
         with:
           script: |
