@@ -1,5 +1,0 @@
-{
-  "name": "CI with Changeset prereleases",
-  "description": "Use Changesets to automatically generate prereleases after tests.",
-  "iconName": "changesets-icon"
-}
