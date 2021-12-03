@@ -1,0 +1,14 @@
+name: Release
+on:
+  push:
+    branches-ignore:
+      - $default-branch
+      - 'changeset-release/main'
+
+jobs:
+  release-canary:
+    name: Canary
+    uses: primer/.github/.github/workflows/release_canary.yml@main
+    secrets:
+      github_token: ${{ secrets.GITHUB_TOKEN }}
+      npm_token: ${{ secrets.NPM_AUTH_TOKEN_SHARED }}

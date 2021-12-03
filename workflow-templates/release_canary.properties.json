@@ -1,0 +1,9 @@
+{
+  "name": "Release canary",
+  "description": "Use changesets to publish canary releases",
+  "filePatterns": [
+    "package.json$",
+    ".changeset/**"
+  ]
+}
+  
