@@ -8,7 +8,7 @@ on:
         required: false
         default: npm ci
     secrets:
-      github_token: 
+      gh_token: 
         required: true
       npm_token:
         required: true
@@ -49,7 +49,7 @@ jobs:
           echo "$( jq ".version = \"$(echo $version)-rc.$(git rev-parse --short HEAD)\"" package.json )" > package.json
           yarn publish --tag next
         env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
+          GITHUB_TOKEN: ${{ secrets.gh_token }}
 
       - name: Output candidate version
         uses: actions/github-script@v4.0.2

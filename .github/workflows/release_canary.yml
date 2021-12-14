@@ -8,7 +8,7 @@ on:
         required: false
         default: npm ci
     secrets:
-      github_token: 
+      gh_token: 
         required: true
       npm_token:
         required: true
