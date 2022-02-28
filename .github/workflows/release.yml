@@ -7,6 +7,10 @@ on:
         type: string
         required: false
         default: npm ci
+      title:
+        type: string
+        required: false
+        default: Release tracking
     secrets:
       gh_token: 
         required: true
@@ -38,7 +42,7 @@ jobs:
         id: changesets
         uses: changesets/action@master
         with:
-          title: Release Tracking
+          title: ${{ inputs.title }}
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: npm run release
         env:
