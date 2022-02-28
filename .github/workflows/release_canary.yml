@@ -14,8 +14,24 @@ on:
         required: true
 
 jobs:
+  has:
+    name: Check Secrets
+    runs-on: ubuntu-latest
+    steps:
+    - id: secrets
+      env:
+        npm_token: ${{ secrets.npm_token }}
+        gh_token: ${{ secrets.gh_token }}
+      if: ${{ env.npm_token != '' && env.gh_token != '' }}
+      run:
+        echo "::set-output name=secrets::1"
+    outputs:
+      secrets: ${{ steps.secrets.outputs.secrets }}
+
   release-canary:
     name: Canary
+    needs: has
+    if: ${{ needs.has.outputs.secrets }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
