@@ -7,6 +7,10 @@ on:
         type: string
         required: false
         default: npm ci
+      tag:
+        type: string
+        required: false
+        default: next
     secrets:
       gh_token: 
         required: true
@@ -47,7 +51,7 @@ jobs:
         run: |
           version=$(jq -r .version package.json)
           echo "$( jq ".version = \"$(echo $version)-rc.$(git rev-parse --short HEAD)\"" package.json )" > package.json
-          yarn publish --tag next
+          yarn publish --tag ${{ inputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.gh_token }}
 
