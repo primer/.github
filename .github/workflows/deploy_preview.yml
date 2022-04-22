@@ -23,9 +23,6 @@ on:
       deployment_url:
         description: "Preview deployment url"
         value: ${{ jobs.deploy.outputs.deployment_url }}
-    secrets:
-      GITHUB_TOKEN:
-        required: false
 
 jobs:
   build:
