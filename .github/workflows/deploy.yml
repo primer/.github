@@ -19,6 +19,9 @@ on:
         type: number
         required: true
         default: 16
+    secrets:
+      GITHUB_TOKEN:
+        required: false
 
 jobs:
   build:
@@ -48,6 +51,8 @@ jobs:
 
       - name: Build
         run: ${{ inputs.build }}
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Archive build output
         run: "tar --dereference --directory ${{ inputs.output_dir }} -cvf artifact.tar ."

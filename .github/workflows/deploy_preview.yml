@@ -23,6 +23,9 @@ on:
       deployment_url:
         description: "Preview deployment url"
         value: ${{ jobs.deploy.outputs.deployment_url }}
+    secrets:
+      GITHUB_TOKEN:
+        required: false
 
 jobs:
   build:
@@ -52,6 +55,8 @@ jobs:
 
       - name: Build
         run: ${{ inputs.build }}
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Archive build output
         run: "tar --dereference --directory ${{ inputs.output_dir }} -cvf artifact.tar ."
