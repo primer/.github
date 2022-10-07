@@ -51,7 +51,7 @@ jobs:
         run: |
           version=$(jq -r .version package.json)
           echo "$( jq ".version = \"$(echo $version)-rc.$(git rev-parse --short HEAD)\"" package.json )" > package.json
-          yarn publish --tag ${{ inputs.tag }}
+          yarn changeset publish --tag ${{ inputs.tag }}
         env:
           GITHUB_TOKEN: ${{ secrets.gh_token }}
 
