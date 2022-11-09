@@ -6,8 +6,6 @@ on:
         type: string
         required: false
     secrets:
-      GITHUB_TOKEN:
-        required: true
       GH_GH_PAT:
         required: true
 
