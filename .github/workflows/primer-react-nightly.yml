@@ -1,8 +1,10 @@
 on:
   push:
-  workflow_dispatch:
-  schedule:
-    - cron:  '0 0 * * *'
+  workflow_call:
+    inputs:
+      label:
+        type: string
+        required: false
 
 permissions:
   contents: write
@@ -35,14 +37,14 @@ jobs:
         uses: actions/checkout@v2
       - name: Install dependencies
         run: npm ci --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_GH_PAT: ${{ secrets.PLANNING_TRACKING_PAT_PACKAGE_ACCESS }}
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          GH_GH_PAT: ${{ secrets.PLANNING_TRACKING_PAT_PACKAGE_ACCESS }}
       - name: Install primer/react release candidate
         run: npm install @primer/react@next
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_GH_PAT: ${{ secrets.PLANNING_TRACKING_PAT_PACKAGE_ACCESS }}
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          GH_GH_PAT: ${{ secrets.PLANNING_TRACKING_PAT_PACKAGE_ACCESS }}
 
       - name: Get primer/react version
         id: primer-react-version
@@ -61,7 +63,7 @@ jobs:
           branch: primer/react-nightly
           draft: true
           delete-branch: true
-          labels: 'changelog:dependency'
+          labels: ${{ inputs.label }}
           title: 'Integration tests for primer/react ${{ steps.primer-react-version.outputs.result}}'
           body: |
             - Release candidate: https://github.com/primer/react/pull/${{ needs.guard.outputs.release-candidate-pr }}
