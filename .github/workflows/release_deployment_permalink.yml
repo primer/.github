@@ -30,6 +30,8 @@ jobs:
               deployment_id: deployments[0].id
             });
             
+            console.log(deploymentStatuses)
+            
             const permalink = deploymentStatuses.find(deployment => deployment.status === 'success').environment_url
             return permalink
 
