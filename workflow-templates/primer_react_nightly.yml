@@ -1,0 +1,19 @@
+name: Primer react nightly
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+  pull-requests: write
+
+
+jobs:
+  nightly:
+    uses: primer/.github/.github/workflows/primer-react-nightly.yml@main
+    secrets:
+      GH_GH_PAT: ${{ secrets.PLANNING_TRACKING_PAT_PACKAGE_ACCESS }}
