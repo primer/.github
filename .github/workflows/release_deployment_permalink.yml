@@ -24,7 +24,7 @@ jobs:
               per_page: 1
             })
             
-            const deploymentStatuses = octokit.rest.repos.listDeploymentStatuses({
+            const deploymentStatuses = github.rest.repos.listDeploymentStatuses({
               owner: 'primer',
               repo: 'react', # TODO make this configurable
               deployment_id: deployments[0].id
