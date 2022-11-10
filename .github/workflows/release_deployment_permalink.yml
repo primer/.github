@@ -30,10 +30,10 @@ jobs:
             const deploymentStatuses = github.rest.repos.listDeploymentStatuses({
               owner: 'primer',
               repo: 'react', // TODO make this configurable
-              deployment_id: deployments[0].id
+              deployment_id: deployments.data[0].id
             });
             
-            const permalink = deploymentStatuses.find(deployment => deployment.status === 'success').environment_url
+            const permalink = deploymentStatuses.data.find(deployment => deployment.status === 'success').environment_url
             return permalink
 
       - run: echo "${{steps.permalink.outputs.result}}"
