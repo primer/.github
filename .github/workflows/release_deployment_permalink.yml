@@ -19,14 +19,14 @@ jobs:
           script: |
             const deployments = await github.rest.listDeployments({
               owner: 'primer', 
-              repo: 'react', # TODO make this configurable
+              repo: 'react', // TODO make this configurable
               ref: 'changeset-release/main',
               per_page: 1
             })
             
             const deploymentStatuses = github.rest.repos.listDeploymentStatuses({
               owner: 'primer',
-              repo: 'react', # TODO make this configurable
+              repo: 'react', // TODO make this configurable
               deployment_id: deployments[0].id
             });
             
