@@ -17,23 +17,20 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const deployments = await github.rest.repos.listDeployments({
+            const {data: deployments} = await github.rest.repos.listDeployments({
               owner: 'primer', 
               repo: 'react', // TODO make this configurable
               ref: 'changeset-release/main',
               per_page: 1
             })
             
-            
-            console.log(deployments)
-            
-            const deploymentStatuses = github.rest.repos.listDeploymentStatuses({
+            const {data: deploymentStatuses} = github.rest.repos.listDeploymentStatuses({
               owner: 'primer',
               repo: 'react', // TODO make this configurable
-              deployment_id: deployments.data[0].id
+              deployment_id: deployments[0].id
             });
             
-            const permalink = deploymentStatuses.data.find(deployment => deployment.status === 'success').environment_url
+            const permalink = deploymentStatuses.find(deployment => deployment.status === 'success').environment_url
             return permalink
 
       - run: echo "${{steps.permalink.outputs.result}}"
