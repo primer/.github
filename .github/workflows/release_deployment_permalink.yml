@@ -17,7 +17,7 @@ jobs:
         with:
           result-encoding: string
           script: |
-            const deployments = await github.rest.listDeployments({
+            const deployments = await github.rest.repos.listDeployments({
               owner: 'primer', 
               repo: 'react', // TODO make this configurable
               ref: 'changeset-release/main',
