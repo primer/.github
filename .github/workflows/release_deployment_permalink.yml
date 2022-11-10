@@ -1,0 +1,36 @@
+name: Test
+
+on:
+  push:
+
+permissions:
+  contents: read
+  
+jobs:
+  preview_url:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. get last deployment for release tracking branch (rest api)
+      - name: Get permalink from last deployment
+        uses: actions/github-script@v6
+        id: permalink
+        with:
+          result-encoding: string
+          script: |
+            const deployments = await github.rest.listDeployments({
+              owner: 'primer', 
+              repo: 'react', # TODO make this configurable
+              ref: 'changeset-release/main',
+              per_page: 1
+            })
+            
+            const deploymentStatuses = octokit.rest.repos.listDeploymentStatuses({
+              owner: 'primer',
+              repo: 'react', # TODO make this configurable
+              deployment_id: deployments[0].id
+            });
+            
+            const permalink = deploymentStatuses.find(deployment => deployment.status === 'success').environment_url
+            return permalink
+
+      - run: echo "${{steps.permalink.outputs.result}}"
