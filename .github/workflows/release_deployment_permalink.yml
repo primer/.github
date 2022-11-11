@@ -3,7 +3,6 @@
 
 name: Last documentation permalink
 on:
-  push:
   workflow_call:
     inputs:
       repo:
