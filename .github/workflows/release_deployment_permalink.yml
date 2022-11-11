@@ -34,7 +34,7 @@ jobs:
             
             console.log(result)
             
-            const permalink = result.data.find(deployment => deployment.status === 'success').environment_url
-            return permalink
+            // const permalink = result.data.find(deployment => deployment.status === 'success').environment_url
+            // return permalink
 
       - run: echo "${{steps.permalink.outputs.result}}"
