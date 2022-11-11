@@ -13,12 +13,13 @@ on:
     outputs:
       permalink:
         description: "Link to documentation for the last merged release candidate"
+        value: ${{ jobs.get_permalink.outputs.permalink }}
     
 permissions:
   contents: read
   
 jobs:
-  permalink:
+  get_permalink:
     runs-on: ubuntu-latest
     outputs:
       permalink: ${{ steps.permalink.outputs.result }}
