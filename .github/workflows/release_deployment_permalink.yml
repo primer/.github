@@ -26,13 +26,13 @@ jobs:
             
             console.log(deployments[0].id)
             
-            const result = github.rest.repos.listDeploymentStatuses({
+            const {data: deploymentStatuses} = await github.rest.repos.listDeploymentStatuses({
               owner: 'primer',
               repo: 'react', // TODO make this configurable
               deployment_id: deployments[0].id
             });
             
-            console.log(result)
+            console.log(deploymentStatuses)
             
             // const permalink = result.data.find(deployment => deployment.status === 'success').environment_url
             // return permalink
