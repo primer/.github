@@ -21,10 +21,9 @@ jobs:
               owner: 'primer', 
               repo: 'react', // TODO make this configurable
               ref: 'changeset-release/main',
+              environment: 'github-pages',
               per_page: 1
             })
-            
-            console.log(deployments[0].id)
             
             const {data: deploymentStatuses} = await github.rest.repos.listDeploymentStatuses({
               owner: 'primer',
