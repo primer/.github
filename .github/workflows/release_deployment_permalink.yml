@@ -31,8 +31,10 @@ jobs:
               repo: 'react', // TODO make this configurable
               deployment_id: deployments[0].id
             });
+            
+            console.log(deploymentStatuses)
        
-            const permalink = deploymentStatuses.find(deployment => deployment.status === 'success').environment_url
-            return permalink
+            // const permalink = deploymentStatuses.find(deployment => deployment.status === 'success').environment_url
+            // return permalink
 
       - run: echo "${{steps.permalink.outputs.result}}"
