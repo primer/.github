@@ -74,8 +74,8 @@ jobs:
   rc-at-dotcom:
       name: Run primer integration workflow at dotcom
       needs: release-candidate
-      # Using the branch name for ref as the PR is still not merged - TODO: Remove this once we confirm that the workflow is running as expected
-      uses: github/github/.github/workflows/primer-react-nightly.yml@primer-react-nightly
+      # Using the branch name for ref as the PR is still WIP - TODO: Remove this once we confirm that the workflow is running as expected
+      uses: github/github/.github/workflows/primer-react-nightly.yml@primer-react-at-RC-time
       # TODO: FInd out how to get the PR number for the release and the sha that is merged into main and trigger the workflow with those inputs 
       with:
         merged-pr: 'TODO: Get the SHA that is merged into main and triggers the workflow'
