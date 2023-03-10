@@ -7,6 +7,10 @@ on:
         type: string
         required: false
         default: npm ci
+      node-version:
+        type: number
+        required: false
+        default: 16
     secrets:
       gh_token: 
         required: true
@@ -27,7 +31,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: 16
+          node-version: ${{ inputs.node-version }}
 
       - name: Install dependencies
         run: ${{ inputs.install }}
