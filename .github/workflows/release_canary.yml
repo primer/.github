@@ -11,10 +11,10 @@ on:
         type: number
         required: false
         default: 16
-      registry:
-        type: string
+      useGPR:
+        type: boolean
         required: false
-        default: registry.npmjs.org
+        default: false
     secrets:
       gh_token: 
         required: true
@@ -45,8 +45,13 @@ jobs:
 
       - name: Create .npmrc
         run: |
+          if [ "$useGPR" = "true" ]; then
+            registry="//npm.pkg.github.com/"
+          else
+            registry="//registry.npmjs.org/"
+          fi
           cat << EOF > "$HOME/.npmrc"
-            //${{ inputs.registry }}/:_authToken=$NPM_TOKEN
+            $registry:_authToken=$NPM_TOKEN
           EOF
         env:
           NPM_TOKEN: ${{ secrets.npm_token }}
