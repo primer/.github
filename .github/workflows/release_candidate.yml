@@ -11,11 +11,11 @@ on:
         type: string
         required: false
         default: next
-      node-version:
+      node_version:
         type: number
         required: false
         default: 16
-      useGPR:
+      use_gpr:
         type: boolean
         required: false
         default: false
@@ -39,7 +39,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
-          node-version: ${{ inputs.node-version }}
+          node_version: ${{ inputs.node_version }}
 
       - name: Install dependencies
         run: ${{ inputs.install }}
@@ -49,7 +49,7 @@ jobs:
 
       - name: Create .npmrc
         run: |
-          if [ "$useGPR" = "true" ]; then
+          if [ "$use_gpr" = "true" ]; then
             registry="//npm.pkg.github.com/"
           else
             registry="//registry.npmjs.org/"
@@ -58,6 +58,7 @@ jobs:
             $registry:_authToken=$NPM_TOKEN
           EOF
         env:
+          use_gpr: ${{ inputs.use_gpr }}
           NPM_TOKEN: ${{ secrets.npm_token }}
 
       - name: Publish release candidate
