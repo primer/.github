@@ -54,6 +54,7 @@ jobs:
             $registry:_authToken=$NPM_TOKEN
           EOF
         env:
+          useGPR: ${{ inputs.useGPR }}
           NPM_TOKEN: ${{ secrets.npm_token }}
 
       - name: Publish canary release
