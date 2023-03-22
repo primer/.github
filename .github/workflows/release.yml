@@ -15,6 +15,10 @@ on:
         type: number
         required: false
         default: 16
+      use_gpr:
+        type: boolean
+        required: false
+        default: false
     secrets:
       gh_token:
         required: true
@@ -41,6 +45,16 @@ jobs:
 
       - name: Install dependencies
         run: ${{ inputs.install }}
+
+      - name: Create .npmrc
+        if: ${{ inputs.use_gpr }}
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+          //npm.pkg.github.com/:_authToken=$NPM_TOKEN
+          EOF
+        env:
+          use_gpr: ${{ inputs.use_gpr }}
+          NPM_TOKEN: ${{ secrets.npm_token }}
 
       - name: Create release pull request or publish to npm
         id: changesets
