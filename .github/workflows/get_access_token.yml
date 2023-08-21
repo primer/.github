@@ -25,3 +25,5 @@ jobs:
           installation-id: ${{ vars.PRIMER_APP_INSTALLATION_ID_SHARED }}
       - id: print-length
         run: ruby -e 'puts ENV["GH_TOKEN"]&.size.inspect'
+        env:
+          GH_TOKEN: ${{ jobs.run.steps.get-access-token.outputs.access-token }}
