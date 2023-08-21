@@ -3,6 +3,9 @@
 
 name: Get an access token from the primer App
 
+on:
+  workflow_call:
+
 jobs:
   get-access-token:
     name: Get access token
