@@ -8,14 +8,15 @@ on:
     outputs:
       access-token:
         description: "An access token for the given installation."
-        value: ${{ jobs.run.outputs.access-token }}
+        value: ${{ jobs.run.steps.get-access-token.outputs.access-token }}
 
 jobs:
   run:
     name: Get access token
     runs-on: ubuntu-latest
     steps:
-      - uses: camertron/github-app-installation-auth-action@v1
+      - id: get-access-token
+        uses: camertron/github-app-installation-auth-action@v1
         with:
           app-id: ${{ vars.PRIMER_APP_ID_SHARED }}
           private-key: ${{ secrets.PRIMER_APP_PRIVATE_KEY_SHARED }}
