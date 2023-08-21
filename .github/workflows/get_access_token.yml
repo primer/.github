@@ -26,4 +26,4 @@ jobs:
       - id: print-length
         run: ruby -e 'puts ENV["GH_TOKEN"]&.size.inspect'
         env:
-          GH_TOKEN: ${{ jobs.run.steps.get-access-token.outputs.access-token }}
+          GH_TOKEN: ${{ steps.get-access-token.outputs.access-token }}
