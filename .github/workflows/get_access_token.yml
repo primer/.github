@@ -5,9 +5,13 @@ name: Get an access token from the primer App
 
 on:
   workflow_call:
+    outputs:
+      access-token:
+        description: "An access token for the given installation."
+        value: ${{ jobs.run.outputs.access-token }}
 
 jobs:
-  get-access-token:
+  run:
     name: Get access token
     runs-on: ubuntu-latest
     steps:
