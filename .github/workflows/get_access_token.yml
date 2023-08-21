@@ -14,6 +14,8 @@ jobs:
   run:
     name: Get access token
     runs-on: ubuntu-latest
+    outputs:
+      access-token: ${{ steps.get-access-token.outputs.access-token }}
     steps:
       - id: get-access-token
         uses: camertron/github-app-installation-auth-action@v1
