@@ -1,0 +1,93 @@
+name: Release with App
+
+on:
+  workflow_call:
+    inputs:
+      install:
+        type: string
+        required: false
+        default: npm ci
+      title:
+        type: string
+        required: false
+        default: Release tracking
+      node-version:
+        type: number
+        required: false
+        default: 16
+      use_gpr:
+        type: boolean
+        required: false
+        default: false
+    secrets:
+      npm_token:
+        required: true
+      app-id:
+        required: false
+      private-key:
+        required: false
+      client-id:
+        required: false
+      client-secret:
+        required: false
+      installation-id:
+        required: false
+
+jobs:
+  release:
+    name: Release
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Install dependencies
+        run: ${{ inputs.install }}
+
+      - name: Create .npmrc
+        if: ${{ inputs.use_gpr }}
+        run: |
+          cat << EOF > "$HOME/.npmrc"
+          //npm.pkg.github.com/:_authToken=$NPM_TOKEN
+          EOF
+        env:
+          use_gpr: ${{ inputs.use_gpr }}
+          NPM_TOKEN: ${{ secrets.npm_token }}
+
+      # `changesets/action` depends on @changesets/cli being installed
+      # and we cannot add it as dependency because it conflicts with `primer-changesets-cli`
+      - run: npm install @changesets/cli@2.26.1 --no-save
+
+      - name: Get access token
+        id: get-access-token
+        uses: camertron/github-app-installation-auth-action@v1
+        with:
+          app-id: ${{ secrets.app-id }}
+          private-key: ${{ secrets.private-key }}
+          client-id: ${{ secrets.client-id }}
+          client-secret: ${{ secrets.client-secret }}
+          installation-id: ${{ secrets.installation-id }}
+
+      - name: Create release pull request or publish to npm
+        id: changesets
+        # Uses SHA for security hardening
+        # Currently pointing at a commit for the v1.4.1 tag
+        # Please keep this up-to-date if you're changing the SHA below
+        uses: changesets/action@e9cc34b540dd3ad1b030c57fd97269e8f6ad905a
+        with:
+          title: ${{ inputs.title }}
+          # This expects you to have a script called release which does a build for your packages and calls changeset publish
+          publish: npm run release
+        env:
+          GITHUB_TOKEN: ${{ steps.get-access-token.outputs.access-token }}
+          NPM_TOKEN: ${{ secrets.npm_token }}
