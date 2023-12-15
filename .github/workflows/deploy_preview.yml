@@ -67,7 +67,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ${{ inputs.output_dir }}
-          name: preview
 
   deploy:
     name: Deploy
@@ -84,4 +83,3 @@ jobs:
         uses: actions/deploy-pages@v2
         with:
           preview: true
-          artifact_name: preview
