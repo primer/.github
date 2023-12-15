@@ -27,6 +27,11 @@ on:
       gh_token:
         required: false
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   build:
     name: Build
@@ -70,10 +75,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
     outputs:
       deployment_url: ${{ steps.deployment.outputs.page_url }}
     steps:
