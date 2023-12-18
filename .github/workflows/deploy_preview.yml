@@ -58,14 +58,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.gh_token }}
 
-      - name: Archive build output
-        run: "tar --dereference --directory ${{ inputs.output_dir }} -cvf artifact.tar ."
-
       - name: Upload artifact
-        uses: actions/upload-artifact@main
+        uses: actions/upload-pages-artifact@v2
         with:
           name: github-pages
-          path: artifact.tar
+          path: ${{ inputs.output_dir }}
 
   deploy:
     name: Deploy
