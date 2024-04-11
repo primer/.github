@@ -34,8 +34,6 @@ jobs:
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
-        with:
-          version: ${{inputs.node_version}}
 
       - name: Set up Node
         uses: actions/setup-node@v4
