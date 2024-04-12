@@ -30,8 +30,6 @@ jobs:
     steps:
       - name: Checkout default branch
         uses: actions/checkout@v4
-        with:
-          version: ${{inputs.node_version}}
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -39,7 +37,7 @@ jobs:
           node-version: "${{inputs.node_version}}"
 
       - name: Cache dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
