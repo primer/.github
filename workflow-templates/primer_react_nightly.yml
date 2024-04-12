@@ -14,6 +14,6 @@ permissions:
 
 jobs:
   nightly:
-    uses: primer/.github/.github/workflows/primer-react-nightly.yml@main
+    uses: primer/.github/.github/workflows/primer-react-nightly.yml@v1.0.0
     secrets:
       GH_GH_PAT: ${{ secrets.PLANNING_TRACKING_PAT_PACKAGE_ACCESS }}
