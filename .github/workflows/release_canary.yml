@@ -10,7 +10,7 @@ on:
       node_version:
         type: number
         required: false
-        default: 16
+        default: 20
       use_gpr:
         type: boolean
         required: false
