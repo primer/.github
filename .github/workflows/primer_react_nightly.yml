@@ -57,7 +57,7 @@ jobs:
 
       - name: Get primer/react version
         id: primer-react-version
-        uses: actions/github-script@v7.0.1
+        uses: actions/github-script@v7
         with:
           script: |
             const pkg = require('./package.json')
