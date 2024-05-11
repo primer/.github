@@ -1,0 +1,72 @@
+name: Release Event Tracking
+# Measure a datadog event every time a release occurs
+
+on:
+  workflow_call:
+    secrets:
+      datadog_api_key:
+        required: true
+
+jobs:
+
+  pull-request:
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'changeset-release/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        id: release-info
+        with:
+          script: |
+            const event = context.payload.pull_request.merged === true ? 'merged' : context.payload.action
+            const alert_type = event === 'merged' ? 'success' : 'error'
+            core.setOutput('event', event)
+            core.setOutput('alert_type', alert_type)
+      - name: Datadog log event
+        uses: masci/datadog@v1
+        with:
+          api-key: ${{ secrets.datadog_api_key }}
+          events: |
+            - title: "Primer Release Tracking PR"
+              text: "%%% \nPrimer release tracking [pull request ${{ github.event.action }}](${{ github.event.pull_request.html_url }})\n %%%"
+              priority: "normal"
+              alert_type: "${{ steps.release-info.outputs.alert_type }}"
+              tags:
+                - "source:primer"
+                - "task:release"
+                - "event:tracking_${{ steps.release-info.outputs.event }}"
+                - "repo:${{ github.repository }}"
+
+  release-published:
+    if: github.event_name == 'release' && github.event.action == 'published'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        id: release-info
+        with:
+          script: |
+            const body = context.payload.release.body
+            const published_at = context.payload.release.published_at
+            let bump = ''
+            if (body.includes('### Major Changes\r\n')) {
+              bump = 'major'
+            } else if (body.includes('### Minor Changes\r\n')) {
+              bump = 'minor'
+            } else {
+              bump = 'patch'
+            }
+            core.setOutput('bump', bump)
+      - name: Datadog log event
+        uses: masci/datadog@v1
+        with:
+          api-key: ${{ secrets.datadog_api_key }}
+          events: |
+            - title: "Primer Release Published"
+              text: "%%% \nPublished release [${{ github.repository }}@${{ github.event.release.tag_name }}](${{ github.event.release.html_url }})\n %%%"
+              priority: "normal"
+              alert_type: "success"
+              tags:
+                - "source:primer"
+                - "task:release"
+                - "event:published"
+                - "version:${{ steps.release-info.outputs.bump }}"
+                - "repo:${{ github.repository }}"
