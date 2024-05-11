@@ -61,7 +61,7 @@ jobs:
         with:
           api-key: ${{ secrets.datadog_api_key }}
           events: |
-            - title: "Release Published – ${{ github.repository }}"
+            - title: "Release Published – ${{ github.repository }}@${{ github.event.release.tag_name }}"
               text: "%%% \nPublished ${{ steps.release-info.outputs.bump }} release [${{ github.repository }}@${{ github.event.release.tag_name }}](${{ github.event.release.html_url }})\n %%%"
               priority: "normal"
               alert_type: "success"
