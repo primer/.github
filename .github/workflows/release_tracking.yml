@@ -18,7 +18,7 @@ jobs:
         with:
           script: |
             const event = context.payload.pull_request.merged === true ? 'merged' : context.payload.action
-            const alert_type = event === 'merged' ? 'success' : 'error'
+            const alert_type = event === 'closed' ? 'error' : 'info'
             core.setOutput('event', event)
             core.setOutput('alert_type', alert_type)
       - name: Datadog log event
