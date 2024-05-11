@@ -1,0 +1,4 @@
+{
+  "name": "Release Tracking",
+  "description": "Measure a datadog event every time a release occurs"
+}
