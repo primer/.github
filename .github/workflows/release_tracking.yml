@@ -26,8 +26,8 @@ jobs:
         with:
           api-key: ${{ secrets.datadog_api_key }}
           events: |
-            - title: "Primer Release Tracking PR"
-              text: "%%% \nPrimer release tracking [pull request ${{ github.event.action }}](${{ github.event.pull_request.html_url }})\n %%%"
+            - title: "Release Tracking PR ${{ steps.release-info.outputs.event }} – ${{ github.repository }}"
+              text: "%%% \nPrimer release tracking [pull request ${{ steps.release-info.outputs.event }}](${{ github.event.pull_request.html_url }})\n %%%"
               priority: "normal"
               alert_type: "${{ steps.release-info.outputs.alert_type }}"
               source_type_name: "GITHUB"
@@ -61,8 +61,8 @@ jobs:
         with:
           api-key: ${{ secrets.datadog_api_key }}
           events: |
-            - title: "Primer Release Published"
-              text: "%%% \nPublished release [${{ github.repository }}@${{ github.event.release.tag_name }}](${{ github.event.release.html_url }})\n %%%"
+            - title: "Release Published – ${{ github.repository }}"
+              text: "%%% \nPublished ${{ steps.release-info.outputs.bump }} release [${{ github.repository }}@${{ github.event.release.tag_name }}](${{ github.event.release.html_url }})\n %%%"
               priority: "normal"
               alert_type: "success"
               source_type_name: "GITHUB"
