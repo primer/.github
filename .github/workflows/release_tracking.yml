@@ -49,6 +49,7 @@ jobs:
             console.log(context)
             const body = context.payload.release.body
             const published_at = context.payload.release.published_at
+            const version = context.payload.release.tag_name.replace(/^[^0-9]+/, '')
             let bump = ''
             if (body.includes('### Major Changes\r\n')) {
               bump = 'major'
@@ -58,13 +59,14 @@ jobs:
               bump = 'patch'
             }
             core.setOutput('bump', bump)
+            core.setOutput('version', version)
       - name: Datadog log event
         uses: masci/datadog@v1
         with:
           api-key: ${{ secrets.datadog_api_key }}
           events: |
-            - title: "Release Published – ${{ github.repository }}@${{ github.event.release.tag_name }}"
-              text: "%%% \nPublished ${{ steps.release-info.outputs.bump }} release [${{ github.repository }}@${{ github.event.release.tag_name }}](${{ github.event.release.html_url }})\n %%%"
+            - title: "Release Published – ${{ github.repository }}@${{ steps.release-info.outputs.version }}"
+              text: "%%% \nPublished ${{ steps.release-info.outputs.bump }} release [${{ github.repository }}@${{ steps.release-info.outputs.version }}](${{ github.event.release.html_url }})\n %%%"
               priority: "normal"
               alert_type: "success"
               source_type_name: "GITHUB"
