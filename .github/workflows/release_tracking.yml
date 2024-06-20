@@ -74,5 +74,5 @@ jobs:
                 - "source:primer"
                 - "task:release"
                 - "event:published"
-                - "version:${{ steps.release-info.outputs.bump }}"
+                - "diff:${{ steps.release-info.outputs.bump }}"
                 - "library:${{ github.repository }}"
