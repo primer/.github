@@ -4,9 +4,9 @@ on:
   push:
   workflow_dispatch:
 
-run-name: ${{ matrix.name }}
 jobs:
   assign-release-conductor:
+    name: ${{ matrix.name }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
