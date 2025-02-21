@@ -1,0 +1,20 @@
+name: Assign Release Conductor
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  assign-release-conductor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: ./.github/pagerduty
+        id: pagerduty
+        with:
+          schedule-id: 'P3IIVC4'
+          token: ${{ secrets.PAGERDUTY_TOKEN_SHARED }}
+      - run: echo ${{ steps.pagerduty.outputs.user }} is release conductor
