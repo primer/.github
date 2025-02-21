@@ -44,14 +44,16 @@ jobs:
               }
             })
             console.log("Current Conductor:", currentMember.data[0].login)
-            await github.request('DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}', {
-              org: 'primer',
-              team_slug: '${{ matrix.team_slug }}',
-              username: currentMember.data[0].login,
-              headers: {
-                'X-GitHub-Api-Version': '2022-11-28'
-              }
-            })
+            if (currentMember.data.length) {
+              await github.request('DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}', {
+                org: 'primer',
+                team_slug: '${{ matrix.team_slug }}',
+                username: currentMember.data[0].login,
+                headers: {
+                  'X-GitHub-Api-Version': '2022-11-28'
+                }
+              })
+            }
             await github.request('PUT /orgs/{org}/teams/{team_slug}/memberships/{username}', {
               org: 'primer',
               team_slug: '${{ matrix.team_slug }}',
