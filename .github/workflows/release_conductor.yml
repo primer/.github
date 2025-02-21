@@ -17,10 +17,10 @@ jobs:
             team_slug: view-components-release-conductor
             repo: primer/view_components
           # PRC
-          - schedule_id: 'P3IIVC4'
-            name: React Release Conductor
-            team_slug: react-release-conductor
-            repo: primer/react
+          # - schedule_id: 'P3IIVC4'
+          #   name: React Release Conductor
+          #   team_slug: react-release-conductor
+          #   repo: primer/react
     steps:
       - uses: actions/checkout@v4
       - name: Get App Token
@@ -29,6 +29,13 @@ jobs:
         with:
           app-id: ${{ vars.PRIMER_APP_ID_SHARED }}
           private-key: ${{ secrets.PRIMER_APP_PRIVATE_KEY_SHARED }}
+      - name: PagerDuty Schedule
+        uses: ./.github/pagerduty
+        id: pagerduty
+        with:
+          schedule-id: ${{ matrix.schedule_id }}
+          token: ${{ secrets.PAGERDUTY_TOKEN_SHARED }}
+      - run: echo ${{ steps.pagerduty.outputs.user }} is the ${{ matrix.name }}
       - name: Get Release PR
         id: release-pr
         run: |
@@ -38,16 +45,11 @@ jobs:
           echo "reviews=$(gh pr view $PR_NUMBER -R ${{ matrix.repo }} --json reviewRequests  --jq ".reviewRequests[].login" | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-      - run: echo ${{ steps.release-pr.outputs.number }}
-      - run: echo ${{ steps.release-pr.outputs.assignees }}
-      - run: echo ${{ steps.release-pr.outputs.reviews }}
-      # - name: PagerDuty Schedule
-      #   uses: ./.github/pagerduty
-      #   id: pagerduty
-      #   with:
-      #     schedule-id: ${{ matrix.schedule_id }}
-      #     token: ${{ secrets.PAGERDUTY_TOKEN_SHARED }}
-      # - run: echo ${{ steps.pagerduty.outputs.user }} is the ${{ matrix.name }}
+      - name: Reset Assignees & Reviewers
+        run: |
+          gh pr edit ${{ steps.release-pr.outputs.number }} -R ${{ matrix.repo }} --remove-reviewer ${{ steps.release-pr.outputs.reviews }} --remove-assignee ${{ steps.release-pr.outputs.assignees }} --add-reviewer ${{ steps.pagerduty.outputs.user }} --add-assignee ${{ steps.pagerduty.outputs.user }}
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       # - name: Update Release Team Membership
       #   uses: actions/github-script@v7
       #   with:
