@@ -42,5 +42,5 @@ jobs:
               headers: {
                 'X-GitHub-Api-Version': '2022-11-28'
               }
-            })['data']
-            console.log(currentMember[0].login)
+            })
+            console.log(currentMember['data'])
