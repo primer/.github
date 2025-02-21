@@ -43,8 +43,8 @@ jobs:
                 'X-GitHub-Api-Version': '2022-11-28'
               }
             })
-            console.log("Current Conductor:", currentMember.data[0].login)
             if (currentMember.data.length) {
+              console.log("Current Conductor:", currentMember.data[0].login)
               await github.request('DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}', {
                 org: 'primer',
                 team_slug: '${{ matrix.team_slug }}',
