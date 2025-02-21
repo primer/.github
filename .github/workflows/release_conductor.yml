@@ -43,4 +43,4 @@ jobs:
                 'X-GitHub-Api-Version': '2022-11-28'
               }
             })
-            console.log(currentMember['data'])
+            console.log(currentMember.data[0].login)
