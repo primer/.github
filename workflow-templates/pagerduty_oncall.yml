@@ -1,0 +1,11 @@
+name: Get Oncall username
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pagerduty:
+    name: PagerDuty Oncall
+    uses: primer/.github/.github/workflows/pagerduty.yml@main
+    secrets:
+      datadog_api_key: ${{ secrets.DATADOG_API_KEY }}
