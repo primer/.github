@@ -48,7 +48,8 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
       - name: Reset Assignees & Reviewers
         run: |
-          gh pr edit ${{ steps.release-pr.outputs.number }} -R ${{ matrix.repo }} --remove-reviewer ${{ steps.release-pr.outputs.reviews }} --remove-assignee ${{ steps.release-pr.outputs.assignees }} --add-reviewer ${{ steps.pagerduty.outputs.user }} --add-assignee ${{ steps.pagerduty.outputs.user }}
+          gh pr edit ${{ steps.release-pr.outputs.number }} -R ${{ matrix.repo }} --remove-reviewer ${{ steps.release-pr.outputs.reviews }} --remove-assignee ${{ steps.release-pr.outputs.assignees }}
+          gh pr edit ${{ steps.release-pr.outputs.number }} -R ${{ matrix.repo }} --add-reviewer ${{ steps.pagerduty.outputs.user }} --add-assignee ${{ steps.pagerduty.outputs.user }}
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
       # - name: Update Release Team Membership
