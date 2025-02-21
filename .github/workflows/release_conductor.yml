@@ -31,7 +31,7 @@ jobs:
           owner: primer
           private-key: ${{ secrets.PRIMER_APP_PRIVATE_KEY_SHARED }}
       - name: PagerDuty Schedule
-        uses: ./pagerduty_oncall.yml
+        uses: ./workflows/pagerduty_oncall.yml
         id: pagerduty
         with:
           schedule-id: ${{ matrix.schedule_id }}
