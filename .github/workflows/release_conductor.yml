@@ -34,8 +34,8 @@ jobs:
         run: |
           PR_NUMBER=$(gh pr list -R ${{ matrix.repo }} --head changeset-release/main --json number --jq '.[].number')
           echo "number=$PR_NUMBER\n" >> $GITHUB_OUTPUT
-          echo "assignees=$(gh pr view $PR_NUMBER -R ${{ matrix.repo }} --json assignees --jq ".assignees[].login" | sed ':a;N;$!ba;s/\n/,/g')\n" >> $GITHUB_OUTPUT
-          echo "reviews=$(gh pr view $PR_NUMBER -R ${{ matrix.repo }} --json reviewRequests  --jq ".reviewRequests[].login" | sed ':a;N;$!ba;s/\n/,/g')\n" >> $GITHUB_OUTPUT
+          echo "assignees=$(gh pr view $PR_NUMBER -R ${{ matrix.repo }} --json assignees --jq ".assignees[].login" | tr '\n' ',' | sed 's/,$//')\n" >> $GITHUB_OUTPUT
+          echo "reviews=$(gh pr view $PR_NUMBER -R ${{ matrix.repo }} --json reviewRequests  --jq ".reviewRequests[].login" | tr '\n' ',' | sed 's/,$//')\n" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
       - run: echo ${{ steps.release-pr.outputs.number }}
