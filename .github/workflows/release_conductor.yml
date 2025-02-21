@@ -44,12 +44,12 @@ jobs:
           echo "assignees=$(gh pr view $PR_NUMBER -R ${{ matrix.repo }} --json assignees --jq ".assignees[].login" | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
           echo "reviews=$(gh pr view $PR_NUMBER -R ${{ matrix.repo }} --json reviewRequests  --jq ".reviewRequests[].login" | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
       - name: Reset Assignees & Reviewers
         run: |
           gh pr edit ${{ steps.release-pr.outputs.number }} -R ${{ matrix.repo }} --remove-reviewer ${{ steps.release-pr.outputs.reviews }} --remove-assignee ${{ steps.release-pr.outputs.assignees }} --add-reviewer ${{ steps.pagerduty.outputs.user }} --add-assignee ${{ steps.pagerduty.outputs.user }}
         env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
       # - name: Update Release Team Membership
       #   uses: actions/github-script@v7
       #   with:
