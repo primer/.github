@@ -28,6 +28,7 @@ jobs:
         id: app-token
         with:
           app-id: ${{ vars.PRIMER_APP_ID_SHARED }}
+          owner: primer
           private-key: ${{ secrets.PRIMER_APP_PRIVATE_KEY_SHARED }}
       - name: PagerDuty Schedule
         uses: ./.github/pagerduty
