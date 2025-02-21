@@ -16,12 +16,10 @@ jobs:
           - schedule_id: 'PCCKSZ5'
             name: View Component Release Conductor
             team_slug: view-components-release-conductor
-            repo: primer/view_components
           # PRC
           - schedule_id: 'P3IIVC4'
             name: React Release Conductor
             team_slug: react-release-conductor
-            repo: primer/react
     steps:
       - uses: actions/checkout@v4
       - name: Get App Token
