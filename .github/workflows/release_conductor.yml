@@ -12,9 +12,9 @@ jobs:
       matrix:
         include:
           # PVC
-          # - schedule_id: 'PCCKSZ5'
-          #   name: View Component Release Conductor
-          #   team_slug: view-components-release-conductor
+          - schedule_id: 'PCCKSZ5'
+            name: View Component Release Conductor
+            team_slug: view-components-release-conductor
           # PRC
           - schedule_id: 'P3IIVC4'
             name: React Release Conductor
