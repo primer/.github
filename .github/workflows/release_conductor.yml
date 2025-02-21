@@ -14,17 +14,28 @@ jobs:
           # PVC
           - schedule_id: 'PCCKSZ5'
             name: View Component Release Conductor
+            team_slug: view-components-release-conductor
           # PRC
           - schedule_id: 'P3IIVC4'
             name: React Release Conductor
+            team_slug: react-release-conductor
     steps:
       - uses: actions/checkout@v4
-      # - uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 22
       - uses: ./.github/pagerduty
         id: pagerduty
         with:
           schedule-id: ${{ matrix.schedule_id }}
           token: ${{ secrets.PAGERDUTY_TOKEN_SHARED }}
       - run: echo ${{ steps.pagerduty.outputs.user }} is the ${{ matrix.name }}
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.PRIMER_APP_ID_SHARED }}
+          private-key: ${{ secrets.PRIMER_APP_PRIVATE_KEY_SHARED }}
+      - run: |
+          gh api \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            /orgs/primer/teams/${{ matrix.team_slug }}/members
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
