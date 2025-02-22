@@ -1,0 +1,18 @@
+name: Get Oncall username
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pagerduty:
+    name: PagerDuty Oncall
+    uses: primer/.github/.github/workflows/pagerduty_oncall.yml@main
+    with:
+      schedule-id: ${{ PAGERDUTY_SCHEDULE_ID }}
+    secrets:
+      token: ${{ PAGERDUTY_TOKEN }}
+  update-assignee:
+    runs-on: ubuntu-latest
+    needs: pagerduty
+    steps:
+      - run: echo "${{ needs.pagerduty.outputs.user }} is on call"

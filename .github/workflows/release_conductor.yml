@@ -1,0 +1,71 @@
+name: Assign Release Conductor
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # 12:00 AM UTC daily
+  workflow_dispatch:
+
+jobs:
+  assign-release-conductor:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          # PVC
+          - schedule_id: 'PCCKSZ5'
+            name: View Component Release Conductor
+            team_slug: view-components-release-conductor
+          # PRC
+          - schedule_id: 'P3IIVC4'
+            name: React Release Conductor
+            team_slug: react-release-conductor
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get App Token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.PRIMER_APP_ID_SHARED }}
+          owner: primer
+          private-key: ${{ secrets.PRIMER_APP_PRIVATE_KEY_SHARED }}
+      - name: PagerDuty Schedule
+        uses: ./.github/actions/pagerduty
+        id: pagerduty
+        with:
+          schedule-id: ${{ matrix.schedule_id }}
+          token: ${{ secrets.PAGERDUTY_TOKEN_SHARED }}
+      - run: echo ${{ steps.pagerduty.outputs.user }} is the ${{ matrix.name }}
+
+      - name: Update Release Team Membership
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const currentMembers = await github.request('GET /orgs/{org}/teams/{team_slug}/members', {
+              org: 'primer',
+              team_slug: '${{ matrix.team_slug }}',
+              headers: {
+                'X-GitHub-Api-Version': '2022-11-28'
+              }
+            })
+            for (const user of currentMembers.data) {
+              console.log("Current Conductor:", user.login)
+              await github.request('DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}', {
+                org: 'primer',
+                team_slug: '${{ matrix.team_slug }}',
+                username: user.login,
+                headers: {
+                  'X-GitHub-Api-Version': '2022-11-28'
+                }
+              })
+            }
+            await github.request('PUT /orgs/{org}/teams/{team_slug}/memberships/{username}', {
+              org: 'primer',
+              team_slug: '${{ matrix.team_slug }}',
+              username: '${{ steps.pagerduty.outputs.user }}',
+              role: 'maintainer',
+              headers: {
+                'X-GitHub-Api-Version': '2022-11-28'
+              }
+            })
