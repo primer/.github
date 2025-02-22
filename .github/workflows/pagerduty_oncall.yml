@@ -82,7 +82,7 @@ jobs:
                 headers: {
                   Accept: 'application/json',
                   'Content-Type': 'application/json',
-                  Authorization: 'Token token=${{ inputs.token }}',
+                  Authorization: 'Token token=${{ secrets.token }}',
                 },
               })
               console.log(response)
