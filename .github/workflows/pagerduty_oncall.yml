@@ -53,7 +53,7 @@ jobs:
     steps:
       - name: Get PagerDuty Schedule
         id: pagerduty
-        uses: primer/.github/.github/actions/pagerduty
+        uses: ./.github/actions/pagerduty
         with:
           schedule-id: ${{ inputs.schedule-id }}
           token: ${{ secrets.token }}
