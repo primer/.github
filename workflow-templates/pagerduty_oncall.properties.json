@@ -1,4 +1,4 @@
 {
-  "name": "Release Tracking",
-  "description": "Measure a datadog event every time a release occurs"
+  "name": "Pagerduty OnCall",
+  "description": "Look up the on-call engineer for a given schedule"
 }

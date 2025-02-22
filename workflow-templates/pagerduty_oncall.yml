@@ -6,6 +6,13 @@ on:
 jobs:
   pagerduty:
     name: PagerDuty Oncall
-    uses: primer/.github/.github/workflows/pagerduty.yml@main
+    uses: primer/.github/.github/workflows/pagerduty_oncall.yml@main
+    with:
+      schedule-id: ${{ PAGERDUTY_SCHEDULE_ID }}
     secrets:
-      datadog_api_key: ${{ secrets.DATADOG_API_KEY }}
+      token: ${{ PAGERDUTY_TOKEN }}
+  update-assignee:
+    runs-on: ubuntu-latest
+    needs: pagerduty
+    steps:
+      - run: echo "${{ needs.pagerduty.outputs.user }} is on call"
