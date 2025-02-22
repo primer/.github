@@ -51,9 +51,44 @@ jobs:
       previous-schedule-id: ${{ steps.pagerduty.outputs.previous-schedule-id }}
       previous-schedule-user: ${{ steps.pagerduty.outputs.previous-schedule-user }}
     steps:
-      - name: PagerDuty Schedule
-        uses: ./.github/actions/pagerduty
+      - name: Get PagerDuty Schedule
         id: pagerduty
+        uses: actions/github-script@v6
         with:
-          schedule-id: ${{ inputs.schedule-id }}
-          token: ${{ secrets.token }}
+          script: |
+            const { PAGERDUTY_API_KEY } = process.env;
+            const today = new Date()
+            // Get current schedule
+            const schedule = await getSchedule(today);
+            core.setOutput('user', schedule.user.summary);
+            core.setOutput('start', schedule.start);
+            core.setOutput('end', schedule.end);
+            core.setOutput('id', schedule.id);
+            const previousScheduleEnd = new Date(schedule.start);
+            previousScheduleEnd.setDate(previousScheduleEnd.getDate() - 1);
+            // Get previous schedule
+            const previousSchedule = await getSchedule(previousScheduleEnd);
+            core.setOutput('previous-schedule-start', previousSchedule.start);
+            core.setOutput('previous-schedule-end', previousSchedule.end);
+            core.setOutput('previous-schedule-id', previousSchedule.id);
+            core.setOutput('previous-schedule-user', previousSchedule.user.summary);
+            // Get a schedule
+            // @see https://developer.pagerduty.com/api-reference/3f03afb2c84a4-get-a-schedule
+            async function getSchedule(date) {
+              const url = new URL('https://api.pagerduty.com/schedules/${{ inputs.schedule-id }}')
+              url.searchParams.append('since', date.toISOString())
+              url.searchParams.append('until', date.toISOString())
+              const response = await fetch(url, {
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                  Authorization: 'Token token=${{ secrets.token }}',
+                },
+              })
+              const data = await response.json()
+              if (!data.schedule) {
+                throw new Error('Unable to get schedule for id: ${{ inputs.schedule-id }}')
+              }
+              const [schedule] = data.schedule.final_schedule.rendered_schedule_entries
+              return schedule;
+            }
