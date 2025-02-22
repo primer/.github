@@ -54,8 +54,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
-          fetch-depth: 0
+          repository: primer/.github
       - name: Get PagerDuty Schedule
         id: pagerduty
         uses: ./.github/actions/pagerduty
