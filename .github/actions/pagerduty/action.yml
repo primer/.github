@@ -35,11 +35,6 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
-        fetch-depth: 0
     - name: Get PagerDuty Schedule
       id: pagerduty
       uses: actions/github-script@v6
