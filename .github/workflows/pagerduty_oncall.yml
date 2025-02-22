@@ -85,6 +85,7 @@ jobs:
                   Authorization: 'Token token=${{ inputs.token }}',
                 },
               })
+              console.log(response)
               const data = await response.json()
               if (!data.schedule) {
                 throw new Error('Unable to get schedule for id: ${{ inputs.schedule-id }}')
