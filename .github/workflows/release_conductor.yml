@@ -2,7 +2,7 @@ name: Assign Release Conductor
 
 on:
   schedule:
-    - cron: '30 16 * * MON' # Run after schedules have changed for the week
+    - cron: '30 16 * * *' # Run after schedules have changed for the week
   workflow_dispatch:
 
 jobs:
