@@ -49,23 +49,27 @@ jobs:
                 'X-GitHub-Api-Version': '2022-11-28'
               }
             })
-            for (const user of currentMembers.data) {
-              console.log("Current Conductor:", user.login)
-              await github.request('DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}', {
+            const newConductor = '${{ steps.pagerduty.outputs.user }}'
+            const currentConductors = currentMembers.data.map(u => u.login)
+            if (!currentConductors.includes(newConductor)) {
+              for (const username of currentConductors) {
+                console.log("Current Conductor:", username)
+                await github.request('DELETE /orgs/{org}/teams/{team_slug}/memberships/{username}', {
+                  org: 'primer',
+                  team_slug: '${{ matrix.team_slug }}',
+                  username: username,
+                  headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                  }
+                })
+              }
+              await github.request('PUT /orgs/{org}/teams/{team_slug}/memberships/{username}', {
                 org: 'primer',
                 team_slug: '${{ matrix.team_slug }}',
-                username: user.login,
+                username: newConductor,
+                role: 'maintainer',
                 headers: {
                   'X-GitHub-Api-Version': '2022-11-28'
                 }
               })
             }
-            await github.request('PUT /orgs/{org}/teams/{team_slug}/memberships/{username}', {
-              org: 'primer',
-              team_slug: '${{ matrix.team_slug }}',
-              username: '${{ steps.pagerduty.outputs.user }}',
-              role: 'maintainer',
-              headers: {
-                'X-GitHub-Api-Version': '2022-11-28'
-              }
-            })
