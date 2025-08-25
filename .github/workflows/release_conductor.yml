@@ -21,7 +21,7 @@ jobs:
             name: React Release Conductor
             team_slug: react-release-conductor
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Get App Token
         uses: actions/create-github-app-token@v2
         id: app-token
