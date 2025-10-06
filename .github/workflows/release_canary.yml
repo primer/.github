@@ -16,7 +16,7 @@ on:
         required: false
         default: false
     secrets:
-      gh_token: 
+      gh_token:
         required: true
       npm_token:
         required: true
@@ -80,4 +80,4 @@ jobs:
               description: package.version,
               target_url: `https://unpkg.com/${package.name}@${package.version}/`
             })
-      - uses: ./.github/actions/upload-versions
+      - uses: primer/.github/.github/actions/upload-versions
