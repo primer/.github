@@ -10,15 +10,9 @@ on:
       node_version:
         type: number
         required: false
-        default: 20
-      use_gpr:
-        type: boolean
-        required: false
-        default: false
+        default: 24
     secrets:
       gh_token:
-        required: true
-      npm_token:
         required: true
 
 jobs:
@@ -35,7 +29,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v6
         with:
-          node_version: ${{ inputs.node_version }}
+          node-version: ${{ inputs.node_version }}
 
       - name: Install dependencies
         run: ${{ inputs.install }}
@@ -43,26 +37,12 @@ jobs:
       - name: Build
         run: npm run build --if-present
 
-      - name: Create .npmrc
-        run: |
-          if [ "$use_gpr" = "true" ]; then
-            registry="//npm.pkg.github.com/"
-          else
-            registry="//registry.npmjs.org/"
-          fi
-          cat << EOF > "$HOME/.npmrc"
-            $registry:_authToken=$NPM_TOKEN
-          EOF
-        env:
-          use_gpr: ${{ inputs.use_gpr }}
-          NPM_TOKEN: ${{ secrets.npm_token }}
-
       - name: Publish canary release
         run: |
           echo "$( jq '.version = "0.0.0"' package.json )" > package.json
           echo -e "---\n$( jq .name package.json ): patch\n---\n\nFake entry to force publishing" > .changeset/force-snapshot-release.md
-          yarn changeset version --snapshot
-          yarn changeset publish --tag canary
+          npx changeset version --snapshot
+          npx changeset publish --tag canary
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}
 
@@ -80,4 +60,5 @@ jobs:
               description: package.version,
               target_url: `https://unpkg.com/${package.name}@${package.version}/`
             })
-      - uses: primer/.github/.github/actions/upload-versions@main
+      - name: Upload Versions
+        uses: primer/.github/.github/actions/upload-versions@main
