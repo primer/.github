@@ -15,14 +15,8 @@ on:
         type: number
         required: false
         default: 20
-      use_gpr:
-        type: boolean
-        required: false
-        default: false
     secrets:
       gh_token:
-        required: true
-      npm_token:
         required: true
 
 jobs:
@@ -46,16 +40,6 @@ jobs:
       - name: Install dependencies
         run: ${{ inputs.install }}
 
-      - name: Create .npmrc
-        if: ${{ inputs.use_gpr }}
-        run: |
-          cat << EOF > "$HOME/.npmrc"
-          //npm.pkg.github.com/:_authToken=$NPM_TOKEN
-          EOF
-        env:
-          use_gpr: ${{ inputs.use_gpr }}
-          NPM_TOKEN: ${{ secrets.npm_token }}
-
       # `changesets/action` depends on @changesets/cli being installed
       # and we cannot add it as dependency because it conflicts with `primer-changesets-cli`
       - run: npm install @changesets/cli@2.26.1 --no-save
@@ -71,4 +55,3 @@ jobs:
           publish: npm run release
         env:
           GITHUB_TOKEN: ${{ secrets.gh_token }}
-          NPM_TOKEN: ${{ secrets.npm_token }}
