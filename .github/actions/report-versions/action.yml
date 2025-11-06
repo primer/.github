@@ -30,7 +30,7 @@ runs:
               continue;
             }
 
-            github.rest.repos.createCommitStatus({
+            await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
               repo: context.repo.repo,
               sha: context.sha,
