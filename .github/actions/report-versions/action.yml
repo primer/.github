@@ -1,0 +1,42 @@
+name: "Report Versions"
+description: "Report the versions back to the pull request."
+inputs:
+  package_paths:
+    description: "Glob pattern(s) for package.json files to extract versions from"
+    required: false
+    default: |
+      **/package.json
+      !**/node_modules/**
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      with:
+        node-version: 24
+    - name: Create deployments for the versions
+      uses: actions/github-script@v8
+      with:
+        script: |
+          const fs = require('node:fs');
+
+          const globber = await glob.create(`${{ inputs.package_paths }}`)
+          const packageJsonPaths = await globber.glob()
+
+          for (const packageJsonPath of packageJsonPaths) {
+            const contents = fs.readFileSync(packageJsonPath, 'utf8');
+            const packageJson = JSON.parse(contents);
+            if (packageJson.private) {
+              continue;
+            }
+
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'success',
+              context: `Published ${packageJson.name}`,
+              description: packageJson.version,
+              target_url: `https://unpkg.com/${packageJson.name}@${packageJson.version}/`
+            })
+          }
