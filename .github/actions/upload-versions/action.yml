@@ -1,23 +1,27 @@
-name: 'Upload Versions'
-description: 'Upload version information for public packages'
+name: "Upload Versions"
+description: "Upload version information for public packages"
+inputs:
+  package_paths:
+    description: "Glob pattern(s) for package.json files to extract versions from"
+    required: false
+    default: |
+      **/package.json
+      !**/node_modules/**
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Set up Node.js
       uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
       with:
-        node-version: 22
-    - name: Install glob package
-      shell: bash
-      run: npm install glob --no-package-lock
+        node-version: 24
     - name: Write workspace versions as JSON file
       uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
       with:
         script: |
           const fs = require('node:fs');
-          const {globSync} = require('glob')
 
-          const packageJsonPaths = globSync('**/package.json', { ignore: ['**/node_modules/**'] })
+          const globber = await glob.create(`${{ inputs.package_paths }}`)
+          const packageJsonPaths = await globber.glob()
           const output = {
             packages: [],
           };
