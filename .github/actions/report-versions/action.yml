@@ -15,7 +15,7 @@ runs:
       with:
         node-version: 24
     - name: Create deployments for the versions
-      uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
+      uses: actions/github-script@v8
       with:
         script: |
           const fs = require('node:fs');
