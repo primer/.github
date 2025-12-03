@@ -11,8 +11,11 @@ on:
         type: number
         required: false
         default: 24
+      app-id:
+        required: true
+        type: string
     secrets:
-      gh_token:
+      app-private-key:
         required: true
 
 jobs:
@@ -25,6 +28,7 @@ jobs:
         with:
           # This makes Actions fetch all Git history so that Changesets can generate changelogs with the correct commits
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Set up Node
         uses: actions/setup-node@v6
@@ -33,6 +37,12 @@ jobs:
 
       - name: Install dependencies
         run: ${{ inputs.install }}
+
+      - uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94
+        id: app-token
+        with:
+          app-id: ${{ inputs.app-id }}
+          private-key: ${{ secrets.app-private-key }}
 
       - name: Build
         run: npm run build --if-present
@@ -44,7 +54,7 @@ jobs:
           npx changeset version --snapshot
           npx changeset publish --tag canary
         env:
-          GITHUB_TOKEN: ${{ secrets.github_token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Output canary version
         uses: actions/github-script@v8

@@ -15,8 +15,11 @@ on:
         type: number
         required: false
         default: 20
+      app-id:
+        required: true
+        type: string
     secrets:
-      gh_token:
+      app-private-key:
         required: true
 
 jobs:
@@ -40,6 +43,12 @@ jobs:
       - name: Install dependencies
         run: ${{ inputs.install }}
 
+      - uses: actions/create-github-app-token@7e473efe3cb98aa54f8d4bac15400b15fad77d94
+        id: app-token
+        with:
+          app-id: ${{ inputs.app-id }}
+          private-key: ${{ secrets.app-private-key }}
+
       # `changesets/action` depends on @changesets/cli being installed
       # and we cannot add it as dependency because it conflicts with `primer-changesets-cli`
       - run: npm install @changesets/cli@2.26.1 --no-save
@@ -54,4 +63,4 @@ jobs:
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: npm run release
         env:
-          GITHUB_TOKEN: ${{ secrets.gh_token }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
