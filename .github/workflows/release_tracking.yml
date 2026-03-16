@@ -23,7 +23,7 @@ jobs:
             core.setOutput('event', event)
             core.setOutput('alert_type', alert_type)
       - name: Datadog log event
-        uses: masci/datadog@v1
+        uses: masci/datadog@v2
         with:
           api-key: ${{ secrets.datadog_api_key }}
           events: |
@@ -61,7 +61,7 @@ jobs:
             core.setOutput('bump', bump)
             core.setOutput('version', version)
       - name: Datadog log event
-        uses: masci/datadog@v1
+        uses: masci/datadog@v2
         with:
           api-key: ${{ secrets.datadog_api_key }}
           events: |
