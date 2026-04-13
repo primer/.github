@@ -50,7 +50,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.gh_token }}
 
       - name: Output candidate version
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const package = require(`${process.env.GITHUB_WORKSPACE}/package.json`)
