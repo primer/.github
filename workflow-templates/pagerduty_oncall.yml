@@ -6,7 +6,7 @@ on:
 jobs:
   pagerduty:
     name: PagerDuty Oncall
-    uses: primer/.github/.github/workflows/pagerduty_oncall.yml@main
+    uses: primer/.github/.github/workflows/pagerduty_oncall.yml@494b95a4368e635fef187fa727ad8d11a1934caf # main
     with:
       schedule-id: ${{ PAGERDUTY_SCHEDULE_ID }}
     secrets:

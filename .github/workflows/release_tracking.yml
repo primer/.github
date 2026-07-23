@@ -13,7 +13,7 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'changeset-release/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v9
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         id: release-info
         with:
           script: |
@@ -23,7 +23,7 @@ jobs:
             core.setOutput('event', event)
             core.setOutput('alert_type', alert_type)
       - name: Datadog log event
-        uses: masci/datadog@v2
+        uses: masci/datadog@e6e5018c23bc080396a913bfa61555db64431269 # v2.0.4
         with:
           api-key: ${{ secrets.datadog_api_key }}
           events: |
@@ -42,7 +42,7 @@ jobs:
     if: github.event_name == 'release' && github.event.action == 'published'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/github-script@v9
+      - uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         id: release-info
         with:
           script: |
@@ -61,7 +61,7 @@ jobs:
             core.setOutput('bump', bump)
             core.setOutput('version', version)
       - name: Datadog log event
-        uses: masci/datadog@v2
+        uses: masci/datadog@e6e5018c23bc080396a913bfa61555db64431269 # v2.0.4
         with:
           api-key: ${{ secrets.datadog_api_key }}
           events: |

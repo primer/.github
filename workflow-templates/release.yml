@@ -8,6 +8,6 @@ on:
 jobs:
   release:
     name: Release
-    uses: primer/.github/.github/workflows/release.yml@v1.0.0
+    uses: primer/.github/.github/workflows/release.yml@bb0b18fb589038a93a49a24624be0559c01ed0b9 # v1.0.0
     secrets:
       gh_token: ${{ secrets.GPR_AUTH_TOKEN_SHARED }}

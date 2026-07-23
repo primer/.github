@@ -11,11 +11,11 @@ runs:
   using: "composite"
   steps:
     - name: Set up Node.js
-      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
       with:
         node-version: 24
     - name: Write workspace versions as JSON file
-      uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293
+      uses: actions/github-script@a3e7071a34d7e1f219a8a4de9a5e0a34d1ee1293 # v4.0.2
       with:
         script: |
           const fs = require('node:fs');
@@ -42,7 +42,7 @@ runs:
 
           fs.writeFileSync('versions.json', JSON.stringify(output, null, 2));
     - name: Upload version file
-      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: versions
         path: versions.json
