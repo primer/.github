@@ -13,4 +13,3 @@ updates:
       default-days: 7
     labels:
       - "dependencies"
-      - "skip changeset"
