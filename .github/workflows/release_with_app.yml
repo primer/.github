@@ -82,7 +82,7 @@ jobs:
         id: changesets
         # Uses SHA for security hardening
         # Please keep this up-to-date if you're changing the SHA below
-        uses: changesets/action@a45c4d594aa4e2c509dc14a9f2b3b67ba3780d0d
+        uses: changesets/action@198f833dd7d863100ea6e28967bc9a9fdefadb0a
         with:
           title: ${{ inputs.title }}
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
